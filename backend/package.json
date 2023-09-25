@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon"
+    "start": "node index.js"
   },
   "author": "Mohamed Nasr",
   "license": "ISC",
