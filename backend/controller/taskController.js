@@ -31,7 +31,7 @@ const add = async (req, res) => {
         }),
       },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });
   }
 };

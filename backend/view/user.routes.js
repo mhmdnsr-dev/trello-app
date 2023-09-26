@@ -30,6 +30,6 @@ app.delete('/api/user/delete', tokenVerify, userCtr._delete);
 
 app.delete('/api/user/soft-delete', tokenVerify, userCtr.softDelete);
 
-app.delete('/api/logout', tokenVerify, userCtr.logout);
+app.delete('/api/user/logout', tokenVerify, userCtr.logout);
 
 export default app;
