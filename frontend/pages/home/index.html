@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Trello clone project for an internship in ITI ❤️" />
+    <link rel="icon" href="/assets/images/icons/favico-96.png" />
+
+    <!-- STYLE -->
+    <link
+      rel="stylesheet"
+      href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="main.css" />
+
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- SCRIPT -->
+    <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="module" src="./index.js"></script>
+
+    <title>Trello App</title>
+  </head>
+  <body>
+    <nav class="d-flex pt-3 pb-3 ps-2 pe-2 nav justify-content-between">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <i class="fa-brands fa-trello fa-2xl" style="color: #005eff"></i>
+        <span class="h3 mb-0" id="appname">Trello</span>
+      </a>
+
+      <p class="welcome h3 text-primary mb-0">
+        Welcome!
+        <span class="name ms-2"></span>
+      </p>
+
+      <ul class="navbar-nav mb-2 mb-lg-0 align-items-center flex-row gap-4">
+        <li class="user-profile btn">
+          <button
+            class="btn btn-primary"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight">
+            <i class="fa-solid fa-circle-user fa-xl"></i>
+            <!-- Toggle right offcanvas -->
+          </button>
+
+          <div
+            class="offcanvas offcanvas-end"
+            tabindex="-1"
+            id="offcanvasRight"
+            aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasRightLabel">
+                User settings
+              </h5>
+              <button
+                type="button"
+                class="btn-close off-canvas"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <!-- //////////// -->
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseOne"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseOne">
+                      Update account
+                    </button>
+                  </h2>
+                  <div
+                    id="flush-collapseOne"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                      <form id="update-account">
+                        <div class="form-floating mb-3">
+                          <input
+                            id="fullname-update"
+                            type="text"
+                            title="Type Your name"
+                            class="form-control name"
+                            name="name"
+                            placeholder="Full Name" />
+                          <label for="fullname-update">Full Name</label>
+                          <div class="feedback"></div>
+                        </div>
+                        <div class="form-floating mb-3">
+                          <!-- pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" -->
+                          <input
+                            id="email-update"
+                            type="email"
+                            title="name@example.com"
+                            class="form-control email"
+                            name="email"
+                            placeholder="name@example.com" />
+                          <label for="floatingInput">Email address</label>
+                          <datalist id="domain-list"></datalist>
+                          <div class="feedback"></div>
+                        </div>
+                        <div class="form-floating mb-3">
+                          <!-- pattern="(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=])(?=.{8,}).*$" -->
+                          <input
+                            id="oldPass-update"
+                            type="password"
+                            class="form-control password"
+                            title="At least 8 characters, min 1 Uppercase 1 Lowercase 1 Number 1 special character"
+                            name="oldPass"
+                            placeholder="Password" />
+                          <label for="oldPass-update">Old password</label>
+                          <div class="feedback"></div>
+                          <span
+                            id="show-password1"
+                            class="show-password position-absolute top-0 end-0 me-4 text-primary">
+                            <i
+                              class="fa-solid fa-eye-slash fa-sm first-eye"></i>
+                          </span>
+                        </div>
+                        <div class="form-floating mb-3">
+                          <!-- pattern="(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=])(?=.{8,}).*$" -->
+                          <input
+                            id="newPass-update"
+                            type="password"
+                            class="form-control password"
+                            title="At least 8 characters, min 1 Uppercase 1 Lowercase 1 Number 1 special character"
+                            name="newPass"
+                            placeholder="Password" />
+                          <label for="newPass-update">New password</label>
+                          <div class="feedback"></div>
+                          <span
+                            id="show-password1"
+                            class="show-password position-absolute top-0 end-0 me-4 text-primary">
+                            <i
+                              class="fa-solid fa-eye-slash fa-sm first-eye"></i>
+                          </span>
+                        </div>
+                        <div class="text-center">
+                          <button class="btn btn-primary" type="submit">
+                            Update
+                          </button>
+                        </div>
+                      </form>
+                      <p class="notifi-msg h6 mt-4"></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#flush-collapseTwo"
+                      aria-expanded="false"
+                      aria-controls="flush-collapseTwo">
+                      Delete account
+                    </button>
+                  </h2>
+                  <div
+                    id="flush-collapseTwo"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                      <div class="text-center">
+                        <button
+                          type="submit"
+                          class="btn deactivate btn-dark"
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModalCenter">
+                          Deactivate
+                        </button>
+                        <button
+                          type="submit"
+                          class="btn del-account btn-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModalCenter">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ////////////////// -->
+            </div>
+          </div>
+        </li>
+        <li class="nav-item" id="logout">
+          <a class="nav-link text-black" href="#">Logout</a>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <div class="text-center bg-body-tertiary pt-5 p-3">
+        <button
+          class="collapse-btn new-task-btn btn btn-primary"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseExample"
+          aria-expanded="false"
+          aria-controls="collapseExample">
+          <i class="fa-regular fa-square-plus fa-xl me-2"></i>
+          New Task
+        </button>
+      </div>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body align-items-center">
+          <form id="create-task" class="col-6 create-task-from">
+            <div class="form-floating mb-3">
+              <input
+                required
+                id="title-task"
+                type="text"
+                title="Title Task"
+                class="form-control title"
+                name="title"
+                placeholder="Title task" />
+              <label for="title-task">Title</label>
+              <div class="feedback"></div>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                id="description-task"
+                type="text"
+                title="Task description"
+                class="form-control description"
+                name="description"
+                placeholder="To do something" />
+              <label for="description-task">Description</label>
+              <div class="feedback"></div>
+            </div>
+            <div class="form-floating mb-3">
+              <select
+                required
+                name="status"
+                class="form-select p-0 ps-3 status"
+                aria-label="Default select example">
+                <option selected disabled>Status</option>
+                <option value="todo">Todo</option>
+                <option value="doing">Doing</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                required
+                id="deadline-task"
+                type="date"
+                max="2030-01-01"
+                class="form-control deadline"
+                title="Task deadline"
+                name="deadline"
+                placeholder="Task deadline" />
+              <!-- <label for="deadline-task">New password</label> -->
+              <div class="feedback"></div>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input
+                id="assignto-task"
+                type="email"
+                pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                title="name@example.com"
+                class="form-control assignto"
+                name="assignTo"
+                placeholder="name@example.com" />
+              <label for="floatingInput">Assign to (email)</label>
+              <datalist id="domain-list"></datalist>
+              <div class="feedback"></div>
+            </div>
+
+            <div class="text-center">
+              <button class="btn btn-primary create-task-btn" type="submit">
+                Create
+              </button>
+            </div>
+          </form>
+          <div class="text-center create" id="spinner">
+            <div class="spinner-border text-primary r" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <p class="notifi-msg h6 mt-4"></p>
+        </div>
+      </div>
+      <div
+        class="card-container d-flex flex-wrap gap-3 pt-5 justify-content-center bg-body-tertiary">
+        <div class="text-center insert" id="spinner">
+          <div class="spinner-border text-primary r" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- <div class="bd-example"> -->
+    <!-- <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModalScrollable">
+      Launch demo modal
+    </button> -->
+
+    <!-- //////// MODAL ///////////////////////////// -->
+    <div
+      class="modal fade"
+      id="exampleModalCenter"
+      tabindex="-1"
+      aria-labelledby="exampleModalCenterTitle"
+      style="display: none"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalCenterTitle">
+              Confirmation
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Do you really want to complete this action?</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary close-action"
+              data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-danger save-action">
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

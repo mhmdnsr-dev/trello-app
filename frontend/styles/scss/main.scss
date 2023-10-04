@@ -1,0 +1,98 @@
+@use "./global";
+
+nav ul li {
+  opacity: 0.7;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+  &:nth-child(5) {
+    padding: 0.35rem 0.75rem;
+    font-weight: 600;
+    border-radius: 30px;
+    &:hover {
+      background-color: hsla(0, 0%, 0%, 0.103);
+    }
+  }
+  &:last-child {
+    padding: 0.3rem 0.75rem;
+    color: #0a66c2;
+    border: 1px solid rgb(1, 32, 90);
+    border-radius: 30px;
+    font-weight: 600;
+    &:hover {
+      background-color: hsla(210, 90%, 40%, 0.085);
+    }
+  }
+}
+
+.show-password {
+  cursor: pointer;
+}
+section {
+  margin-bottom: 3rem;
+  h1 {
+    color: #8f5849;
+    font-size: 3.2rem;
+    font-weight: 200;
+  }
+}
+img.hero-img {
+  width: 50%;
+}
+@media screen and (max-width: 991px) {
+  img.hero-img {
+    width: 100%;
+  }
+  footer ul li {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 450px) {
+  :root {
+    font-size: 62.5%;
+  }
+}
+
+nav a > i {
+  width: 8.5rem;
+  height: 2rem;
+}
+
+footer ul {
+  row-gap: 0.4rem;
+  & li {
+    font-size: 0.8rem;
+    &:not(:first-child) {
+      opacity: 0.7;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      &:hover {
+        color: black;
+      }
+    }
+    & svg {
+      width: 5rem;
+      height: 1rem;
+    }
+  }
+}
+
+input[name="email"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+#spinner {
+  display: none;
+}
+#signup {
+  display: block;
+}
+#login {
+  display: none;
+}

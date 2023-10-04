@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+:root {
+  // font-size: 62.5%;
+  font-family: "Atkinson Hyperlegible", "Lucida Sans Typewriter", "Courier New",
+    "Roboto", "Nunito", sans-serif;
+}
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+}
+hr {
+  margin: 0;
+}

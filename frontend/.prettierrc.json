@@ -1,0 +1,7 @@
+{
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "bracketSameLine": true
+  }
+}

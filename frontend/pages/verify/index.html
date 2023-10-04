@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Trello clone project for an internship in ITI ❤️" />
+    <link rel="icon" href="/assets/images/icons/favico-96.png" />
+
+    <!-- STYLE -->
+    <link
+      rel="stylesheet"
+      href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="main.css" />
+
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- SCRIPT -->
+    <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="module" src="./index.js"></script>
+
+    <title>Trello App</title>
+  </head>
+  <body>
+    <nav class="d-flex mb-5 pt-2 pb-2 ps-2 pe-2 bg-body-secondary">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+        <i class="fa-brands fa-trello fa-2xl" style="color: #005eff"></i>
+        <span class="h3 mb-0" id="appname">Trello</span>
+      </a>
+
+      <ul
+        class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center flex-row gap-4">
+        <li class="nav-item" id="join-now-btn">
+          <a class="nav-link text-black" href="/">Join now</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="text-center p-5">
+      <p class="message h3"></p>
+    </div>
+  </body>
+</html>
