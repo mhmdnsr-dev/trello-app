@@ -136,8 +136,9 @@ $(".create-task-from").on("submit", e => {
       taskEl.find(".update-task").on("click", updateTaskHandel);
       taskEl.find(".del-task").on("click", deleteTaskHandel);
       if (!taskId) {
-        taskContainer.children().length === 2 && insertTask(taskEl);
-        $(".no-tasks").remove();
+        // There is only a spinner component plus "no task" component
+        taskContainer.children().length === 2 && $(".no-tasks").remove();
+        insertTask(taskEl);
       } else {
         $(`#${taskId}`).replaceWith(taskEl);
       }
@@ -211,6 +212,7 @@ $(".save-action").on("click", e => {
     if (res.ok)
       if (isDeleteTask) {
         $(`#${taskId}`).remove();
+        // There is no card except the spinner
         taskContainer.children().length === 1 &&
           insertTask(
             `<div class='alert alert-danger no-tasks' role='alert'>No Tasks Found</div>`
