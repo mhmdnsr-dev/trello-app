@@ -162,7 +162,7 @@ $("#signup").on({
       : delete formData.age;
 
     handelRequest(
-      "https://trello-app-7u1u.onrender.com/api/user/register",
+      "https://trello-app-api.onrender.com/api/user/register",
       {
         method: "POST",
         body: formData,
@@ -216,7 +216,7 @@ loginBox.on({
     const formData = Object.fromEntries(new FormData(e.target));
 
     handelRequest(
-      "https://trello-app-7u1u.onrender.com/api/user/login",
+      "https://trello-app-api.onrender.com/api/user/login",
       {
         method: "POST",
         body: formData,

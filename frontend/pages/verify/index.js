@@ -2,7 +2,7 @@ const ticket = new URL(location.href).searchParams.get("ticket");
 
 try {
   const res = await fetch(
-    "https://trello-app-7u1u.onrender.com/api/user/verify",
+    "https://trello-app-api.onrender.com/api/user/verify",
     {
       method: "GET",
       headers: {

@@ -62,7 +62,7 @@ spinnerInsert.css({
 });
 try {
   const res = await fetch(
-    "https://trello-app-7u1u.onrender.com/api/user/get-info",
+    "https://trello-app-api.onrender.com/api/user/get-info",
     {
       method: "GET",
       headers: {
@@ -107,8 +107,8 @@ $(".create-task-from").on("submit", e => {
     formData[prop] && (taskInfo[prop] = formData[prop]);
   }
   const url = taskId
-    ? `https://trello-app-7u1u.onrender.com/api/task/update/${taskId}`
-    : "https://trello-app-7u1u.onrender.com/api/task/add";
+    ? `https://trello-app-api.onrender.com/api/task/update/${taskId}`
+    : "https://trello-app-api.onrender.com/api/task/add";
 
   const method = taskId ? "PATCH" : "POST";
 
@@ -202,7 +202,7 @@ $(".save-action").on("click", e => {
   isDeleteAccount && (endPoint = "api/user/delete");
   isDeactivateAccount && (endPoint = "api/user/soft-delete");
 
-  fetch(`https://trello-app-7u1u.onrender.com/${endPoint}`, {
+  fetch(`https://trello-app-api.onrender.com/${endPoint}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -234,7 +234,7 @@ $("#update-account").on("submit", e => {
   for (let prop in formData) {
     formData[prop] && (userInfo[prop] = formData[prop]);
   }
-  fetch("https://trello-app-7u1u.onrender.com/api/user/update", {
+  fetch("https://trello-app-api.onrender.com/api/user/update", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
