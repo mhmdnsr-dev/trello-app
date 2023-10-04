@@ -41,18 +41,20 @@ Users should be able to:
 
 ### Links
 
-- [GitHub URL](https://github.com/monasr1997/food-order-app/)
-- [Live URL](https://monasr1997.github.io/food-order-app/)
+- [GitHub URL](https://github.com/mhmdnsr-dev/trello-app)
+- [Live URL](https://trello-app-vblq.onrender.com/)
 
 ## My process
 
 ### Built with
 
-- React library.
-- JSX syntax.
-- CSS module.
-- Pure CSS Loaders with [loading.io](https://loading.io/)
-- Firebase database
+#### Frontend
+
+- HTML & CSS & Javascript.
+- SASS
+- jQuery library
+- Bootstrap library
+- Font Awesomelibrary
 
 ### What I learned
 

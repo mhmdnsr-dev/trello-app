@@ -149,9 +149,7 @@ $(".create-task-from").on("submit", e => {
         .each((i, el) => {
           el.value = "";
         });
-
       newTaskBtn.trigger("click");
-
       taskId = null;
     },
     err => {
@@ -218,6 +216,7 @@ $(".save-action").on("click", e => {
             `<div class='alert alert-danger no-tasks' role='alert'>No Tasks Found</div>`
           );
         isDeleteTask = false;
+        taskId = null;
       } else logout();
   });
 
@@ -228,6 +227,8 @@ $(".save-action").on("click", e => {
 $("close-action").on("click", () => {
   taskId = null;
   isDeleteTask = false;
+  isDeleteAccount = false;
+  isDeactivateAccount = false;
 });
 
 $("#update-account").on("submit", e => {
