@@ -1,6 +1,6 @@
-﻿# Create React App | Food Order App
+﻿# Trello clone
 
-This is a project to _udemy_ course [react-the-complete-guide-incl-redux](https://www.udemy.com/course/react-the-complete-guide-incl-redux/)
+A simplified clone project for a Trello application implemented as a full stack application(Frontend & backend)
 
 ## Taple of contents
 
