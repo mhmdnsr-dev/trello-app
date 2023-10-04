@@ -4,22 +4,23 @@ import joi_Date from '@joi/date';
 const joiDate = joi.extend(joi_Date);
 
 const add = joi.object({
-  title: joi.string().required().max(15),
-  description: joi.string().min(15),
+  title: joi.string().required(),
+  description: joi.string(),
   status: joi.string().equal('todo', 'doing', 'done').required(),
   deadline: joiDate
     .date()
     .greater('now')
-    .format('MM-DD-YYYY')
+    .format('YYYY-MM-DD')
     .utc()
     .required(true),
   assignTo: joi.string().email({ minDomainSegments: 2 }),
 });
 const update = joi.object({
-  title: joi.string().max(15),
-  description: joi.string().min(10),
+  title: joi.string(),
+  description: joi.string(),
   status: joi.string().equal('todo', 'doing', 'done'),
-  deadline: joiDate.date().greater('now').format('DD-MM-YYYY').utc(),
+  deadline: joiDate.date().greater('now').format('YYYY-MM-DD').utc(),
+  assignTo: joi.string().email({ minDomainSegments: 2 }),
 });
 
 export default { add, update };

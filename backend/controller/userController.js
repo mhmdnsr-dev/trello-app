@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sendMail from '../utils/send-verify-email.js';
 
+// 1) register
 const register = async (req, res) => {
   try {
     const [user] = await userModel.insertMany({
@@ -39,7 +40,7 @@ const register = async (req, res) => {
   }
 };
 
-//2)
+//2) verify
 const verify = async (req, res) => {
   try {
     const { decodedToken } = req;
@@ -59,19 +60,21 @@ const verify = async (req, res) => {
   }
 };
 
-// 2) login
+// 3) login
 const login = async (req, res) => {
   try {
+    let isPassed = false;
+    let isDeleted = false;
+
     const { email, password } = req.body;
     const user = await userModel.findOne({ email: email });
 
-    let isPassed = false;
     if (user) {
-      if (user.isDeleted)
-        return res.status(403).json({
-          status: 'error',
-          message: 'Email or phone number is already in use. Try to sign in',
-        });
+      if (user.isDeleted) {
+        user.isDeleted = false;
+        user.save();
+        isDeleted = true;
+      }
       isPassed = bcrypt.compareSync(password, user.password);
       if (isPassed) {
         const token = jwt.sign(
@@ -81,47 +84,11 @@ const login = async (req, res) => {
             noTimestamp: true,
           }
         );
-
-        const tasks = await taskModel.aggregate([
-          { $match: { userId: user._id } },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'assignTo',
-              foreignField: '_id',
-              as: 'to',
-            },
-          },
-          { $unwind: '$to' },
-          {
-            $project: {
-              title: 1,
-              description: 1,
-              status: 1,
-              deadline: 1,
-              'to.name': 1,
-              'to.email': 1,
-            },
-          },
-        ]);
-        return res.status(200).json({
-          status: 'success',
-          body: {
-            token,
-            user: {
-              name: user.name,
-              email: user.email,
-              age: user.age,
-              gender: user.gender,
-              phone: user.phone,
-              isVerified: user.isVerified,
-            },
-            tasks,
-          },
-        });
+        return res
+          .status(200)
+          .json({ status: 'success', body: { token, isDeleted } });
       }
     }
-
     return res.status(403).json({
       status: 'fail',
       body: {
@@ -130,6 +97,44 @@ const login = async (req, res) => {
     });
   } catch (err) {
     return res.status(500).json({ status: 'error', message: err.message });
+  }
+};
+
+// 4) get user info
+const getInfo = async (req, res) => {
+  try {
+    const { decodedToken } = req;
+
+    const user = await userModel.findById(decodedToken.userId, {
+      isDeleted: 0,
+      __v: 0,
+      password: 0,
+    });
+    const tasks = await taskModel.aggregate([
+      { $match: { userId: user._id } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'assignTo',
+          foreignField: '_id',
+          as: 'assignTo',
+        },
+      },
+      { $unwind: '$assignTo' },
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          status: 1,
+          deadline: 1,
+          'assignTo.name': 1,
+          'assignTo.email': 1,
+        },
+      },
+    ]);
+    return res.status(200).json({ status: 'success', body: { user, tasks } });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
   }
 };
 
@@ -194,7 +199,7 @@ const _delete = async (req, res) => {
 // 5) soft delete
 const softDelete = async (req, res) => {
   try {
-    const { authorization } = req.headers;
+    //const { authorization } = req.headers;
     const { decodedToken } = req;
 
     const user = await userModel.findByIdAndUpdate(decodedToken.userId, {
@@ -215,8 +220,6 @@ const softDelete = async (req, res) => {
 // 6) logout
 const logout = async (req, res) => {
   try {
-    res.clearCookie('token');
-
     return res.status(202).json({
       status: 'success',
       body: {
@@ -232,6 +235,7 @@ export default {
   register,
   verify,
   login,
+  getInfo,
   update,
   _delete,
   softDelete,

@@ -16,9 +16,10 @@ app.post(
 // 2) verify
 app.get('/api/user/verify', tokenVerify, userCtr.verify);
 
-// login
+// 3) login
 app.post('/api/user/login', validation(userSchema.login), userCtr.login);
 
+// 4) update
 app.patch(
   '/api/user/update',
   validation(userSchema.update),
@@ -26,10 +27,16 @@ app.patch(
   userCtr.update
 );
 
+// 5) getInfo
+app.get('/api/user/get-info', tokenVerify, userCtr.getInfo);
+
+// 6) delete
 app.delete('/api/user/delete', tokenVerify, userCtr._delete);
 
+// 7) soft delete
 app.delete('/api/user/soft-delete', tokenVerify, userCtr.softDelete);
 
+// 8) logout
 app.delete('/api/user/logout', tokenVerify, userCtr.logout);
 
 export default app;

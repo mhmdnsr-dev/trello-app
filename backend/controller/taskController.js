@@ -8,6 +8,7 @@ const add = async (req, res) => {
     const { assignTo } = req.body;
 
     const to = await userModel.findOne({ email: assignTo });
+    const user = await userModel.findById(decodedToken.userId);
 
     const [task] = await taskModel.insertMany({
       ...req.body,
@@ -21,10 +22,13 @@ const add = async (req, res) => {
         task: {
           _id: task._id,
           title: task.title,
-          discription: task.description,
+          description: task.description,
           status: task.status,
           deadline: task.deadline,
-          ...(to && { assignTo }),
+          assignTo: {
+            name: to?.name || user.name,
+            email: to?.email || user.email,
+          },
         },
         ...(to?._id || {
           note: 'The sent email does not represent any user and therefore the task is assigned to you',
@@ -37,47 +41,56 @@ const add = async (req, res) => {
 };
 const update = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id)
-      return res
-        .status(400)
-        .json({ status: 'error', message: `the id is require` }); //Most likely this will not happen
-
+    const { taskId } = req;
+    const { assignTo } = req.body;
+    const to = await userModel.findOne({ email: assignTo });
+    to || delete req.body.assignTo;
     const task = await taskModel.findByIdAndUpdate(
-      id,
-      { ...req.body },
+      taskId,
+      { ...req.body, ...(to && { assignTo: to._id }) },
       {
         new: true,
         fields: {
-          _id: 0,
           userId: 0,
-          assignTo: 0,
           __v: 0,
         },
       }
     );
+
     if (!task)
       return res
         .status(404)
         .json({ status: 'error', message: `Can't found this task` }); //Most likely this will not happen
-    return res.status(202).json({ status: 'success', body: { task } });
+
+    const actualAssign = await userModel.findById(task.assignTo);
+    return res.status(202).json({
+      status: 'success',
+      body: {
+        task: {
+          ...task.toObject(),
+          assignTo: {
+            name: to?.name || actualAssign.name,
+            email: to?.email || actualAssign.email,
+          },
+        },
+        ...(to?._id || {
+          note: 'The email assigned does not represent any user',
+        }),
+      },
+    });
   } catch (err) {
     return res.status(500).json({
       status: 'error',
-      message: err.kind === 'ObjectId' ? 'Invalid id' : err.message,
+      message: err.message,
     });
   }
 };
 
 const _delete = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id)
-      return res
-        .status(400)
-        .json({ status: 'error', message: `the id is require` }); //Most likely this will not happen
+    const { taskId } = req;
 
-    const task = await taskModel.findByIdAndDelete(id);
+    const task = await taskModel.findByIdAndDelete(taskId);
     if (!task)
       return res
         .status(404)
@@ -88,7 +101,7 @@ const _delete = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       status: 'error',
-      message: err.kind === 'ObjectId' ? 'Invalid id' : err.message,
+      message: err.message,
     });
   }
 };

@@ -7,9 +7,8 @@ const transporter = nodemailer.createTransport({
   // port: 465,
   secure: true,
   auth: {
-    // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-    user: 'monasr1997@gmail.com',
-    pass: 'djsu goat stuw fjnm',
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
   },
 });
 
@@ -23,7 +22,7 @@ const main = async function (sendTo, link) {
     // text: `Hi ${sendTo.name} your verify link is `, // plain text body
     html: `
     <div style="text-align:center;">
-    <h1>Welcome to the Trello-app</h1>
+    <h1>Welcome ${sendTo.name} to Trello-app</h1>
     <hr>
     <p>
     Thank you for signing up. Please verify your email address by clicking the following link: <a href="${link}">verify</a>
