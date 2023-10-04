@@ -189,6 +189,9 @@ $("#signup").on({
           )
           .addClass("text-success")
           .removeClass("text-danger");
+
+        $('input[type="email"').attr("list", "");
+        $("#domain-list").html("");
       },
       err => {
         // validity($("#signup input.email"), false, err.message);
