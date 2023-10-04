@@ -21,6 +21,7 @@ A simplified clone project for a Trello application implemented as a full stack 
 
 Users should be able to:
 
+- Install the website on his personal device (PWA)
 - Create your own account.
 - Receive a verification message via the email you entered.
 - Log in to his personal account.
