@@ -21,8 +21,8 @@ A simplified clone project for a Trello application implemented as a full stack 
 
 Users should be able to:
 
-- Add any preferred quantity of meals to the shopping cart.
-- Store and retrieve shopping cart contents via browser sessions from the local storage API.
+- Create your own account.
+- Receive a verification message via the email you entered.
 - Displays the optimal layout according to the screen size of the device.
 - Fetch meals list from firebase database.
 - Load requests order food to firebase database.

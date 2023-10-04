@@ -20,9 +20,9 @@ const register = async (req, res) => {
       }
     );
 
-    // const link = `${process.env.USER_VERIFY_URL}?ticket=${registerToken}`;
+    const link = `${process.env.USER_VERIFY_URL}?ticket=${registerToken}`;
 
-    // await sendMail(user, link);
+    await sendMail(user, link);
 
     return res
       .status(201)
