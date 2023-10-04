@@ -23,10 +23,13 @@ Users should be able to:
 
 - Create your own account.
 - Receive a verification message via the email you entered.
-- Displays the optimal layout according to the screen size of the device.
-- Fetch meals list from firebase database.
-- Load requests order food to firebase database.
-- Increase and decrease cart contents.
+- Log in to his personal account.
+- Adding his own task with details, with the ability to assign it to another user.
+- Edit task details.
+- Delete the entire task.
+- Modify his account information.
+- Delete his account completely or partially (soft delete)
+- sign out
 
 ### Screenshot
 

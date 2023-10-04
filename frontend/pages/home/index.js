@@ -215,6 +215,7 @@ $(".save-action").on("click", e => {
           insertTask(
             `<div class='alert alert-danger no-tasks' role='alert'>No Tasks Found</div>`
           );
+        isDeleteTask = false;
       } else logout();
   });
 
