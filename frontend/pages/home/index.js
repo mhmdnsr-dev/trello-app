@@ -196,6 +196,7 @@ $(".del-account").on("click", e => {
 
 /////////////////
 $(".save-action").on("click", e => {
+  e.stopPropagation();
   let endPoint;
   isDeleteTask && (endPoint = `api/task/delete/${taskId}`);
   isDeleteAccount && (endPoint = "api/user/delete");
