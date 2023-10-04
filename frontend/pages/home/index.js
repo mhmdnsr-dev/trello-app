@@ -224,7 +224,13 @@ $(".save-action").on("click", e => {
 });
 
 // RETURN REQUEST TO DEFAULT (CREATING)
-$("close-action").on("click", () => {
+$(".close-action").on("click", () => {
+  taskId = null;
+  isDeleteTask = false;
+  isDeleteAccount = false;
+  isDeactivateAccount = false;
+});
+$(".modal.fade").on("click", e => {
   taskId = null;
   isDeleteTask = false;
   isDeleteAccount = false;
