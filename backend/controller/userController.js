@@ -14,10 +14,7 @@ const register = async (req, res) => {
 
     const registerToken = jwt.sign(
       { userId: user._id },
-      process.env.ACCESS_TOKEN_SECRET,
-      {
-        noTimestamp: true,
-      }
+      process.env.ACCESS_TOKEN_SECRET
     );
 
     const link = `${process.env.USER_VERIFY_URL}?ticket=${registerToken}`;
@@ -79,10 +76,7 @@ const login = async (req, res) => {
       if (isPassed) {
         const token = jwt.sign(
           { userId: user._id },
-          process.env.ACCESS_TOKEN_SECRET,
-          {
-            noTimestamp: true,
-          }
+          process.env.ACCESS_TOKEN_SECRET
         );
         return res
           .status(200)

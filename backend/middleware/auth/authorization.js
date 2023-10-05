@@ -1,11 +1,8 @@
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
 
 const tokenVerify = (req, res, next) => {
   try {
     const { authorization } = req.headers;
-    
-    
 
     if (!authorization)
       return res.status(401).json({
@@ -13,12 +10,9 @@ const tokenVerify = (req, res, next) => {
         body: { message: 'token authorization is require' },
       });
 
-const token = authorization.split(' ')[1]
+    const token = authorization.split(' ')[1];
 
-    req.decodedToken = jwt.verify(
-      token,
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    req.decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     next();
   } catch (err) {
