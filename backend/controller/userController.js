@@ -177,6 +177,7 @@ const _delete = async (req, res) => {
   try {
     const { decodedToken } = req;
 
+    await taskModel.deleteMany({ userId: decodedToken.userId });
     const user = await userModel.findByIdAndDelete(decodedToken.userId);
 
     return res.status(200).json({
