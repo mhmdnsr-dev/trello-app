@@ -52,8 +52,11 @@ const logout = () => {
 if (!token) logout();
 document.getElementById("logout").addEventListener("click", logout);
 
-// HANDEL DATE INPUT
-$("#deadline-task")[0].min = new Date().toISOString().split("T")[0];
+// HANDELING DATE INPUT
+$(".deadline").datepicker({
+  format: "dd-mm-yyyy",
+  startDate: new Date(),
+});
 
 // GET USER DATA
 let userData;

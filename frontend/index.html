@@ -18,6 +18,9 @@
     <link
       rel="stylesheet"
       href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
     <link rel="stylesheet" href="/main.css" />
     <!--  -->
 
@@ -37,6 +40,7 @@
     <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/intlTelInput.min.js"></script>
 
     <script type="module" src="/index.js"></script>
@@ -129,14 +133,13 @@
                 <i class="fa-solid fa-eye-slash fa-sm second-eye"></i>
               </span>
             </div>
-            <div class="form-floating mb-3">
+            <div class="position-relative mb-3">
               <input
                 id="age-signup"
                 required
-                type="date"
+                type="text"
                 class="form-control age pt-3 pb-3"
                 name="age"
-                min="1950-01-01"
                 placeholder="Your birth of date" />
               <div class="feedback"></div>
             </div>

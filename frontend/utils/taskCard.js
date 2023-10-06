@@ -2,7 +2,9 @@ export default task => {
   return `      
   <div class="col-3 mb-3 mb-sm-0 card-wrapper" id="${task._id}">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body ${
+        new Date(task.deadline) < new Date() ? "bg-danger-subtle" : ""
+      }">
           <h5 class="card-title text-center ${
             task.status === "done" && "text-decoration-line-through"
           } text-primary mb-4">${task.title}</h5>

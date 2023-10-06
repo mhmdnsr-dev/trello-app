@@ -10,7 +10,7 @@ const add = joi.object({
   deadline: joiDate
     .date()
     .greater('now')
-    .format('YYYY-MM-DD')
+    .format('DD-MM-YYYY')
     .utc()
     .required(true),
   assignTo: joi.string().email({ minDomainSegments: 2 }),
@@ -19,7 +19,7 @@ const update = joi.object({
   title: joi.string(),
   description: joi.string(),
   status: joi.string().equal('todo', 'doing', 'done'),
-  deadline: joiDate.date().greater('now').format('YYYY-MM-DD').utc(),
+  deadline: joiDate.date().greater('now').format('DD-MM-YYYY').utc(),
   assignTo: joi.string().email({ minDomainSegments: 2 }),
 });
 

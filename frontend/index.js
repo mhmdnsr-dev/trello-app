@@ -30,7 +30,10 @@ $(".iti__flag-container li").each((_, el) => {
 });
 
 // HANDELING DATE INPUT
-$('input[type="date"]')[0].max = new Date().toISOString().split("T")[0];
+$(".age").datepicker({
+  format: "dd-mm-yyyy",
+  endDate: new Date(),
+});
 
 // SHOWING/HIDDEN PASSWORD
 $(".show-password").each((i, el) => {
@@ -160,7 +163,6 @@ $("#signup").on({
     formData.age
       ? (formData.age = calcAge(new Date(formData.age)))
       : delete formData.age;
-
     handelRequest(
       "https://trello-app-api.onrender.com/api/user/register",
       {
