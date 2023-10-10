@@ -6,7 +6,7 @@ const register = joi.object({
   password: joi.string().min(6).required(),
   age: joi.number(),
   gender: joi.string(),
-  phone: joi.string().required(),
+  phone: joi.string(),
 });
 const login = joi.object({
   email: joi.string().email({ minDomainSegments: 2 }).required(),
