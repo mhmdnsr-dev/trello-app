@@ -78,6 +78,9 @@ const login = async (req, res) => {
           { userId: user._id },
           process.env.ACCESS_TOKEN_SECRET
         );
+        res.cookie('token', token, {
+          httpOnly: true,
+        });
         return res
           .status(200)
           .json({ status: 'success', body: { token, isDeleted } });
@@ -215,6 +218,7 @@ const softDelete = async (req, res) => {
 // 6) logout
 const logout = async (req, res) => {
   try {
+    res.clearCookie('token');
     return res.status(202).json({
       status: 'success',
       body: {
