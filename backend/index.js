@@ -21,7 +21,12 @@ app.use(
   cors({
     origin: function (origin, callback) {
       console.log(origin);
-      if (process.env.CORS_ORIGIN.split(',').indexOf(origin) !== -1) {
+      console.log(typeof origin);
+      console.log(process.env.CORS_ORIGIN);
+      if (
+        process.env.CORS_ORIGIN.split(',').indexOf(origin) !== -1 ||
+        !origin
+      ) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
