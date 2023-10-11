@@ -20,9 +20,6 @@ const app = express();
 app.use(
   cors({
     origin: function (origin, callback) {
-      console.log(origin);
-      console.log(typeof origin);
-      console.log(process.env.CORS_ORIGIN);
       if (
         process.env.CORS_ORIGIN.split(',').indexOf(origin) !== -1 ||
         !origin
