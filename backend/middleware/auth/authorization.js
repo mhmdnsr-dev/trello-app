@@ -2,15 +2,13 @@ import jwt from 'jsonwebtoken';
 
 const tokenVerify = (req, res, next) => {
   try {
-    const { authorization } = req.headers;
+    const token = req.headers.cookie?.split('=')[1];
 
-    if (!authorization)
+    if (!token)
       return res.status(401).json({
         status: 'fail',
-        body: { message: 'token authorization is require' },
+        body: { message: 'Not Authentication' },
       });
-
-    const token = authorization.split(' ')[1];
 
     req.decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 

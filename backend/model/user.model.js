@@ -6,7 +6,7 @@ const userSchema = new Schema({
   password: Schema.Types.String,
   age: Schema.Types.Number,
   gender: Schema.Types.String,
-  phone: { type: Schema.Types.String, unique: true },
+  phone: Schema.Types.String,
   isVerified: { type: Schema.Types.Boolean, default: false },
   isDeleted: { type: Schema.Types.Boolean, default: false },
 });

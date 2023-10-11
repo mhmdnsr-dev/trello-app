@@ -19,7 +19,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: '*',
+    origin: function (origin, callback) {
+      if (process.env.CORS_ORIGIN.split(',').indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
   })
 );
 app.use(express.json());

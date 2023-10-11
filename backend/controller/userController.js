@@ -27,8 +27,10 @@ const register = async (req, res) => {
   } catch (err) {
     if (err.writeErrors)
       return res.status(409).json({
-        status: 'error',
-        message: 'Email or phone number is already in use. Try to sign in',
+        status: 'fail',
+        body: {
+          message: 'Email is already in use. Try to sign in',
+        },
       });
     res.status(500).json({
       status: 'error',
@@ -78,9 +80,12 @@ const login = async (req, res) => {
           { userId: user._id },
           process.env.ACCESS_TOKEN_SECRET
         );
+
         res.cookie('token', token, {
           httpOnly: true,
+          secure: true,
         });
+
         return res
           .status(200)
           .json({ status: 'success', body: { token, isDeleted } });
