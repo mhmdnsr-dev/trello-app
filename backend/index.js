@@ -20,6 +20,7 @@ const app = express();
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log(origin);
       if (process.env.CORS_ORIGIN.split(',').indexOf(origin) !== -1) {
         callback(null, true);
       } else {
