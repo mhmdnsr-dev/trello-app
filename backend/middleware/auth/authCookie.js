@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const tokenVerify = (req, res, next) => {
+const tokenCookieVerify = (req, res, next) => {
   try {
     const token = req.headers.cookie?.split('=')[1];
 
@@ -20,4 +20,4 @@ const tokenVerify = (req, res, next) => {
     return res.json({ status: 'error', message: err.message });
   }
 };
-export default tokenVerify;
+export default tokenCookieVerify;
