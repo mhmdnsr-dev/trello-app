@@ -4,7 +4,7 @@ const userSchema = new Schema({
   name: Schema.Types.String,
   email: { type: Schema.Types.String, unique: true },
   password: Schema.Types.String,
-  age: Schema.Types.Number,
+  dateOfBirth: Schema.Types.Date,
   gender: Schema.Types.String,
   phone: Schema.Types.String,
   isVerified: { type: Schema.Types.Boolean, default: false },

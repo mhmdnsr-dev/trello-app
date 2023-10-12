@@ -23,6 +23,6 @@ app.patch(
 app.delete('/api/task/delete/:id', tokenVerify, validationId, taskCtr._delete);
 
 // 4) get all
-app.get('/api/task/all', tokenVerify, taskCtr.all);
+// app.get('/api/task/all', tokenVerify, taskCtr.all);
 
 export default app;

@@ -4,6 +4,7 @@ const taskSchema = new Schema({
   title: Schema.Types.String,
   description: Schema.Types.String,
   status: Schema.Types.String,
+  deadline: Schema.Types.Date,
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -12,7 +13,6 @@ const taskSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  deadline: Schema.Types.Date,
 });
 
 const taskModel = model('Task', taskSchema);
