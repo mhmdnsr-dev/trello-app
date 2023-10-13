@@ -1,4 +1,4 @@
-const ticket = new URL(location.href).searchParams.get("ticket");
+const token = new URL(location.href).searchParams.get("token");
 
 try {
   const res = await fetch(
@@ -6,7 +6,7 @@ try {
     {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${ticket}`,
+        Authorization: `Bearer ${token}`,
       },
     }
   );
