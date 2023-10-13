@@ -13,7 +13,7 @@ const register = async (req, res) => {
     });
 
     const registerToken = jwt.sign(
-      { userId: user._id },
+      { email: user.email },
       process.env.ACCESS_TOKEN_SECRET
     );
 
@@ -53,8 +53,8 @@ const verify = async (req, res) => {
   try {
     const { decodedToken } = req;
 
-    const user = await userModel.findByIdAndUpdate(
-      decodedToken.userId,
+    const user = await userModel.findOneAndUpdate(
+      { email: decodedToken.email },
       { isVerified: true },
       {
         new: true,
