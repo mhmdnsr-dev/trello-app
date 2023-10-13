@@ -17,9 +17,11 @@ const register = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET
     );
 
-    const link = `${process.env.USER_VERIFY_URL}?ticket=${registerToken}`;
-
-    await sendMail(user, link);
+    const { verifyEmail, verifyUrl } = req.body;
+    if (verifyEmail) {
+      const link = `${verifyUrl}?token=${registerToken}`;
+      await sendMail(user, link);
+    }
 
     return res
       .status(201)
