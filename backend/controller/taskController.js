@@ -25,12 +25,16 @@ const add = async (req, res) => {
           description: task.description,
           status: task.status,
           deadline: task.deadline,
+          assignFrom: {
+            name: user.name,
+            email: user.email,
+          },
           assignTo: {
             name: to?.name || user.name,
             email: to?.email || user.email,
           },
         },
-        ...(to?._id || {
+        ...(!to && {
           note: 'The sent email does not represent any user and therefore the task is assigned to you',
         }),
       },
@@ -41,17 +45,24 @@ const add = async (req, res) => {
 };
 const update = async (req, res) => {
   try {
+    const { decodedToken } = req;
     const { taskId } = req;
     const { assignTo } = req.body;
+    const targetTask = await taskModel.findById(taskId);
+
+    if (targetTask.userId.toString() !== decodedToken.userId)
+      return res.status(403).json({
+        status: 'fail',
+        body: { message: 'You do not have permission to modify this task' },
+      });
     const to = await userModel.findOne({ email: assignTo });
-    to || delete req.body.assignTo;
+    !to && delete req.body.assignTo;
     const task = await taskModel.findByIdAndUpdate(
       taskId,
-      { ...req.body, ...(to && { assignTo: to._id }) },
+      { ...req.body, ...(!to || { assignTo: to._id }) },
       {
         new: true,
         fields: {
-          userId: 0,
           __v: 0,
         },
       }
@@ -63,17 +74,27 @@ const update = async (req, res) => {
         .json({ status: 'error', message: `Can't found this task` }); //Most likely this will not happen
 
     const actualAssign = await userModel.findById(task.assignTo);
+    const ownerTask = await userModel.findById(task.userId);
+
+    const taskData = task.toObject();
+
+    delete taskData.userId;
+
     return res.status(202).json({
       status: 'success',
       body: {
         task: {
-          ...task.toObject(),
+          ...taskData,
+          assignFrom: {
+            name: ownerTask.name,
+            email: ownerTask.email,
+          },
           assignTo: {
             name: to?.name || actualAssign.name,
             email: to?.email || actualAssign.email,
           },
         },
-        ...(to?._id || {
+        ...(!to && {
           note: 'The email assigned does not represent any user',
         }),
       },
@@ -89,6 +110,14 @@ const update = async (req, res) => {
 const _delete = async (req, res) => {
   try {
     const { taskId } = req;
+    const { decodedToken } = req;
+
+    const targetTask = await taskModel.findById(taskId);
+    if (targetTask.userId.toString() !== decodedToken.userId)
+      return res.status(403).json({
+        status: 'fail',
+        body: { message: 'You do not have permission to modify this task' },
+      });
 
     const task = await taskModel.findByIdAndDelete(taskId);
     if (!task)
@@ -111,24 +140,35 @@ const all = async (req, res) => {
     const { deadline } = req.body;
     const user = await userModel.findOne({ _id: decodedToken.userId });
     let tasks = await taskModel.aggregate([
-      { $match: { userId: user._id } },
+      { $match: { $or: [{ userId: user._id }, { assignTo: user._id }] } },
       {
         $lookup: {
           from: 'users',
           localField: 'assignTo',
           foreignField: '_id',
-          as: 'to',
+          as: 'assignTo',
         },
       },
-      { $unwind: '$to' },
+      { $unwind: '$assignTo' },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'assignFrom',
+        },
+      },
+      { $unwind: '$assignFrom' },
       {
         $project: {
           title: 1,
           description: 1,
           status: 1,
           deadline: 1,
-          'to.name': 1,
-          'to.email': 1,
+          'assignTo.name': 1,
+          'assignTo.email': 1,
+          'assignFrom.name': 1,
+          'assignFrom.email': 1,
         },
       },
     ]);
@@ -138,7 +178,7 @@ const all = async (req, res) => {
     if (!tasks.length)
       return res
         .status(204)
-        .json({ status: 'fail', body: 'Not found any task' });
+        .json({ status: 'fail', body: { message: 'Not found any task' } });
     else return res.status(200).json({ status: 'success', body: { tasks } });
   } catch (err) {
     res.status(500).json({ status: 'error', message: err.message });

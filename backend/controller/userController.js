@@ -13,7 +13,7 @@ const register = async (req, res) => {
     });
 
     const registerToken = jwt.sign(
-      { userId: user._id },
+      { email: user.email },
       process.env.ACCESS_TOKEN_SECRET
     );
 
@@ -30,9 +30,11 @@ const register = async (req, res) => {
     if (err.writeErrors)
       return res.status(409).json({
         status: 'error',
-        message: 'Email or phone number is already in use. Try to sign in',
+        body: {
+          message: 'Email is already in use. Try to sign in',
+        },
       });
-    res.status(500).json({
+    return res.status(500).json({
       status: 'error',
       message: err.message,
     });
@@ -44,8 +46,8 @@ const verify = async (req, res) => {
   try {
     const { decodedToken } = req;
 
-    const user = await userModel.findByIdAndUpdate(
-      decodedToken.userId,
+    const user = await userModel.findOneAndUpdate(
+      { email: decodedToken.email },
       { isVerified: true },
       {
         new: true,
@@ -53,7 +55,7 @@ const verify = async (req, res) => {
       }
     );
 
-    return res.status(200).json({ status: 'success', body: user });
+    return res.status(200).json({ status: 'success', body: { user } });
   } catch (err) {
     return res.status(500).json({ status: 'error', message: err.message });
   }
@@ -63,29 +65,26 @@ const verify = async (req, res) => {
 const login = async (req, res) => {
   try {
     let isPassed = false;
-    let isDeleted = false;
+    let reactivation = false;
 
     const { email, password } = req.body;
     const user = await userModel.findOne({ email: email });
 
     if (user) {
-      if (user.isDeleted) {
-        user.isDeleted = false;
-        user.save();
-        isDeleted = true;
-      }
       isPassed = bcrypt.compareSync(password, user.password);
       if (isPassed) {
+        if (user.isDeleted) {
+          user.isDeleted = false;
+          user.save();
+          reactivation = true;
+        }
         const token = jwt.sign(
           { userId: user._id },
           process.env.ACCESS_TOKEN_SECRET
         );
-        res.cookie('token', token, {
-          httpOnly: true,
-        });
         return res
           .status(200)
-          .json({ status: 'success', body: { token, isDeleted } });
+          .json({ status: 'success', body: { token, reactivation } });
       }
     }
     return res.status(403).json({
@@ -100,7 +99,7 @@ const login = async (req, res) => {
 };
 
 // 4) get user info
-const getInfo = async (req, res) => {
+const getData = async (req, res) => {
   try {
     const { decodedToken } = req;
 
@@ -110,7 +109,7 @@ const getInfo = async (req, res) => {
       password: 0,
     });
     const tasks = await taskModel.aggregate([
-      { $match: { userId: user._id } },
+      { $match: { $or: [{ userId: user._id }, { assignTo: user._id }] } },
       {
         $lookup: {
           from: 'users',
@@ -121,6 +120,15 @@ const getInfo = async (req, res) => {
       },
       { $unwind: '$assignTo' },
       {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'assignFrom',
+        },
+      },
+      { $unwind: '$assignFrom' },
+      {
         $project: {
           title: 1,
           description: 1,
@@ -128,12 +136,14 @@ const getInfo = async (req, res) => {
           deadline: 1,
           'assignTo.name': 1,
           'assignTo.email': 1,
+          'assignFrom.name': 1,
+          'assignFrom.email': 1,
         },
       },
     ]);
     return res.status(200).json({ status: 'success', body: { user, tasks } });
   } catch (err) {
-    res.status(500).json({ status: 'error', message: err.message });
+    return res.status(500).json({ status: 'error', message: err.message });
   }
 };
 
@@ -147,14 +157,14 @@ const update = async (req, res) => {
 
     let isPassed = null;
     // If "newPass" is present, "oldPass" must be present.
-    if (newPass) isPassed = bcrypt.compareSync(oldPass, user.password);
+    newPass && (isPassed = bcrypt.compareSync(oldPass, user.password));
 
     if (isPassed === false)
       return res
         .status(406)
         .json({ status: 'fail', body: { message: 'Incorrect password' } });
 
-    const newUser = await userModel.findByIdAndUpdate(
+    const updatedUser = await userModel.findByIdAndUpdate(
       decodedToken.userId,
       {
         ...req.body,
@@ -171,9 +181,17 @@ const update = async (req, res) => {
         },
       }
     );
-    return res.status(202).json({ status: 'success', body: newUser });
+    return res.status(202).json({ status: 'success', body: { updatedUser } });
   } catch (err) {
-    res.status(500).json({ status: 'error', message: err.message });
+    if (err.writeErrors)
+      return res.status(406).json({
+        status: 'fail',
+        body: {
+          message: 'Email is already in use.',
+        },
+      });
+
+    return res.status(500).json({ status: 'error', message: err.message });
   }
 };
 
@@ -192,14 +210,13 @@ const _delete = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ status: 'error', message: err.message });
+    return res.status(500).json({ status: 'error', message: err.message });
   }
 };
 
 // 5) soft delete
 const softDelete = async (req, res) => {
   try {
-    //const { authorization } = req.headers;
     const { decodedToken } = req;
 
     const user = await userModel.findByIdAndUpdate(decodedToken.userId, {
@@ -213,14 +230,13 @@ const softDelete = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ status: 'error', message: err.message });
+    return res.status(500).json({ status: 'error', message: err.message });
   }
 };
 
 // 6) logout
 const logout = async (req, res) => {
   try {
-    res.clearCookie('token');
     return res.status(202).json({
       status: 'success',
       body: {
@@ -228,7 +244,7 @@ const logout = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ status: 'error', message: err.message });
+    return res.status(500).json({ status: 'error', message: err.message });
   }
 };
 
@@ -236,7 +252,7 @@ export default {
   register,
   verify,
   login,
-  getInfo,
+  getData,
   update,
   _delete,
   softDelete,

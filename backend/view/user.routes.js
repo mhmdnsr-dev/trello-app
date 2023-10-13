@@ -28,7 +28,7 @@ app.patch(
 );
 
 // 5) getInfo
-app.get('/api/user/get-info', tokenVerify, userCtr.getInfo);
+app.get('/api/user/get-data', tokenVerify, userCtr.getData);
 
 // 6) delete
 app.delete('/api/user/delete', tokenVerify, userCtr._delete);
